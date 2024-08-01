@@ -1,11 +1,35 @@
 require('dotenv').config();
+const mongoose = require('mongoose');
 
+mongoose.connect('mongodb+srv://gabrielebagabe2001:Tsc8rePwe25IURLE@api-learn.eyefxvu.mongodb.net/test?retryWrites=true&w=majority&appName=api-learn', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
 let Person;
 
-const createAndSavePerson = (done) => {
-  done(null /*, data*/);
-};
+Person = mongoose.model('Person', {
+  name: String,
+  age: Number,
+  favoriteFoods: [String]
+}, 'Person');
+
+function createAndSavePerson(done) {
+  var janeFonda = new Person({ name: "Jane Fonda", age: 84, favoriteFoods: ["eggs", "fish", "fresh fruit"] });
+
+  janeFonda.save((err, person) => {
+    if (err) {
+      console.error(err);
+      if (done) done(err);
+      return
+    }
+
+    console.log('Person saved:', person);
+    if (done) done(null, person);
+  });
+}
+
+createAndSavePerson(() => console.log('Operation completed'));
 
 const createManyPeople = (arrayOfPeople, done) => {
   done(null /*, data*/);
